@@ -1,6 +1,5 @@
-import numpy as np
-import pandas as pd
-import env.Environment as environment
+from env import Environment
+from brain import Brain
 
 """
 A simple example for Reinforcement Learning using table lookup Q-learning method.
@@ -10,36 +9,45 @@ Run this program and to see how the agent will improve its strategy of finding t
 Q-learning application.
 """
 
-def rl():
-    q_table = build_q_table(n_states, actions)
 
-    for episode in range(max_episode):
-        step_counter = 0
-        S = 0
-        is_terminated = False
-        update_env(S, episode, step_counter)
+class Runner:
 
-        while not is_terminated:
-            A = choose_action(S, q_table)
-            S_, R = get_env_feedback(S, A)
-            q_predict = q_table.loc[S, A]
-            if S_ != "terminal":
-                q_target = R + gamma * q_table.iloc[S_, :].max()
-            else:
-                q_target = R
-                is_terminated = True
+    def __init__(self, env, brain):
+        self.env = env
+        self.brain = brain
 
-            q_table.loc[S, A] += alpha * (q_target - q_predict)
-            S = S_
+    def start(self):
+        q_table = self.brain.build_q_table()
 
-            update_env(S, episode, step_counter + 1)
+        for episode in range(self.brain.max_episode):
+            step_counter = 0
+            S = 0
+            is_terminated = False
+            self.env.update_env()
 
-            step_counter += 1
+            while not is_terminated:
+                A = self.brain.choose_action(S, self.brain.q_table)
+                self.brain.S_, self.brain.R = self.brain.get_env_feedback(S, A)
+                q_predict = q_table.loc[S, A]
+                if self.brain.S_ != "terminal":
+                    q_target = self.brain.R + self.brain.gamma * self.brain.q_table.iloc[self.brain.S_, :].max()
+                else:
+                    q_target = self.brain.R
+                    is_terminated = True
 
-        print(q_table)
+                q_table.loc[S, A] += self.brain.alpha * (q_target - q_predict)
+                S = self.brain.S_
+
+                self.env.update_env(S, self.evn.episode, step_counter + 1, self.brain.n_states)
+
+                step_counter += 1
+
+            print(q_table)
 
 
 if __name__ == "__main__":
-    q_table = rl()
+    Brain = Brain()
+    Env = Environment(0, 0, 0, 0)
+    runner = Runner(Env, Brain)
     print("\r\nQ-table:\n")
-    print(q_table)
+    runner.start()

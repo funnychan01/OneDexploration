@@ -14,7 +14,8 @@ class Brain:
         self.max_episode = 13
         self.fresh_time = 0.3
         self.q_table = pd.DataFrame()
-        self.action_name = None
+        self.A = None
+        self.S = None
         self.S_ = None
         self.R = None
 
@@ -37,7 +38,7 @@ class Brain:
 
 
     def get_env_feedback(self, S):
-        if self.action_name == "right":
+        if self.A == "right":
             if S == self.n_states - 2:
                 self.S_ = "terminal"
                 self.R = 1
