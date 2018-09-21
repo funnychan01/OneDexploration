@@ -1,12 +1,14 @@
 import time
 
+
 class Environment:
 
-    def __init__(self, S, episode, step_counter, n_states):
+    def __init__(self, S, episode, step_counter, n_states, fresh_time):
         self.S = S
         self.episode = episode
         self.step_counter = step_counter
         self.n_states = n_states
+        self.fresh_time = fresh_time
 
     def update_env(self):
         # This is how environment be updated
@@ -17,7 +19,7 @@ class Environment:
             time.sleep(2)
             print('\r                                ', end='')
         else:
-            env_list[S] = 'o'
+            env_list[self.S] = 'o'
             interaction = ''.join(env_list)
             print('\r{}'.format(interaction), end='')
-            time.sleep(fresh_time)
+            time.sleep(self.fresh_time)
